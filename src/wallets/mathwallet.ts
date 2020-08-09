@@ -3,6 +3,7 @@ const { Harmony } = require('@harmony-js/core');
 const defaults = {};
 
 export class MathWallet {
+  network: string;
   client: typeof Harmony;
   @observable public isAuthorized: boolean;
   redirectUrl: string;
@@ -15,7 +16,8 @@ export class MathWallet {
   @observable public base16Address: string;
   @observable public balance: string = '0';
 
-  constructor(client: typeof Harmony) {
+  constructor(network: string, client: typeof Harmony) {
+    this.network = network;
     this.client = client;
 
     setTimeout(async () => {
@@ -28,7 +30,7 @@ export class MathWallet {
 
     this.initWallet();
 
-    const session = localStorage.getItem('harmony_session');
+    const session = localStorage.getItem(`harmony_${this.network}_session`);
     const sessionObj = JSON.parse(session);
 
     if (sessionObj && sessionObj.address) {
@@ -86,7 +88,7 @@ export class MathWallet {
 
   private syncLocalStorage() {
     localStorage.setItem(
-      'harmony_session',
+      `harmony_${this.network}_session`,
       JSON.stringify({
         address: this.address,
         sessionType: this.sessionType,

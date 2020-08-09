@@ -79,7 +79,7 @@ class Store {
       account: {},
       web3: null,
       hmy: hmy,
-      mathwallet: new MathWallet(hmy.client),
+      mathwallet: new MathWallet(config.network, hmy.client),
       connectorsByName: {
         MetaMask: injected,
         TrustWallet: injected,
