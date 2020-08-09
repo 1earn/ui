@@ -1,0 +1,11 @@
+const config = {
+  addresses: {"onefi": "0x00F38F869F162368a3e302AC88A4A80256646331", "onecrv": "0xf2dE11b72E75BA5661D6f50d8c9e636723b46546", "faucet": "0x013d1B01BC1856B9d22d91E34147d5746F1D6591", "rewards": "0x6061df5A0892499aEA45bF434BA08946034f3f29", "governance": "0x73b31338D4Ad49a9db51ea4CfBDF1E03Ded63229"},
+
+  /*balancerRewardsAddress: '0x033E52f513F9B98e129381c6708F9faA2DEE5db5',
+  claimAddress: '0xcc9EFea3ac5Df6AD6A656235Ef955fBfEF65B862',
+  governanceAddress: '0x3A22dF48d84957F907e67F4313E3D43179040d6E',
+  bpoolAddress: '0x95c4b6c7cff608c0ca048df8b81a484aa377172b',
+  feeRewardsAddress: '0xb01419E74D8a2abb1bbAD82925b19c36C191A701',*/
+};
+
+export default config;
