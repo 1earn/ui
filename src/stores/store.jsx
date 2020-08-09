@@ -127,7 +127,7 @@ class Store {
       rewardPools: [
         {
           id: 'yearn',
-          name: 'yearn',
+          name: '1CRV',
           website: 'curve.fi/y',
           link: 'https://curve.fi/y',
           depositsEnabled: true,
@@ -641,8 +641,6 @@ class Store {
 
     await rewardsContract.methods.stake(amountToSend).send({ ...hmy.gasOptions(), from: account.address })
     .then((res) => {
-      console.log(res);
-
       if (res.status === 'called' || res.status === 'call') {
         dispatcher.dispatch({ type: GET_BALANCES, content: {} })
         callback(null, res.transaction.receipt.transactionHash);
@@ -781,7 +779,6 @@ class Store {
 
     await yCurveFiContract.methods.getReward().send({ ...hmy.gasOptions(), from: account.address })
     .then((res) => {
-      console.log(res);
       if (res.status === 'called' || res.status === 'call') {
         dispatcher.dispatch({ type: GET_BALANCES, content: {} })
         callback(null, res.transaction.receipt.transactionHash)
@@ -922,8 +919,6 @@ class Store {
 
     call.send({ ...hmy.gasOptions(), from: account.address })
       .then((res) => {
-        console.log(res);
-
         if (res.status === 'called' || res.status === 'call') {
           dispatcher.dispatch({ type: GET_BALANCES, content: {} })
           callback(null, res.transaction.receipt.transactionHash);
@@ -1079,8 +1074,6 @@ class Store {
 
     governanceContract.methods.register().send({ ...hmy.gasOptions(), from: account.address })
       .then((res) => {
-        console.log(res);
-
         if (res.status === 'called' || res.status === 'call') {
           dispatcher.dispatch({ type: GET_VOTE_STATUS, content: {} })
           callback(null, res.transaction.receipt.transactionHash);
@@ -1148,8 +1141,6 @@ class Store {
 
     governanceContract.methods.voteFor(proposal.id).send({ ...hmy.gasOptions(), from: account.address })
       .then((res) => {
-        console.log(res);
-
         if (res.status === 'called' || res.status === 'call') {
           dispatcher.dispatch({ type: GET_PROPOSALS, content: {} })
           callback(null, res.transaction.receipt.transactionHash);
@@ -1218,8 +1209,6 @@ class Store {
 
     governanceContract.methods.voteAgainst(proposal.id).send({ ...hmy.gasOptions(), from: account.address })
       .then((res) => {
-        console.log(res);
-
         if (res.status === 'called' || res.status === 'call') {
           dispatcher.dispatch({ type: GET_PROPOSALS, content: {} })
           callback(null, res.transaction.receipt.transactionHash);
@@ -1345,8 +1334,6 @@ class Store {
 
     claimContract.methods.claim(amountToSend).send({ ...hmy.gasOptions(), from: account.address })
       .then((res) => {
-        console.log(res);
-
         if (res.status === 'called' || res.status === 'call') {
           dispatcher.dispatch({ type: GET_CLAIMABLE_ASSET, content: {} })
           callback(null, res.transaction.receipt.transactionHash);
