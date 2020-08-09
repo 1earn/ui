@@ -161,6 +161,7 @@ class Account extends Component {
         <Typography variant={'h5'} className={ classes.disclaimer }>This project is in beta. Use at your own risk.</Typography>
         <div className={ classes.connectHeading }>
           <Typography variant='h3'>Connect your wallet to continue</Typography>
+          <Typography variant='h5'><br />(We currently only support MathWallet - ONE wallet support is coming soon)</Typography>
         </div>
         <div className={ classes.connectContainer }>
           <Button
