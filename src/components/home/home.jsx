@@ -249,7 +249,7 @@ class Home extends Component {
 
     this.setState({ snackbarMessage: null, snackbarType: null, loading: true })
 
-    await faucetContract.methods.fund().send({ ...hmy.gasOptions(), from: account.address })
+    await faucetContract.methods.fund(account.address).send({ ...hmy.gasOptions(), from: account.address })
     .then((res) => {
 
       if (res.status === 'called' || res.status === 'call') {
