@@ -244,7 +244,7 @@ class Home extends Component {
     const wallet = store.getStore('mathwallet');
     const account = store.getStore('account');
 
-    let faucetContract = hmy.client.contracts.createContract(require('../../contracts/HRC20Faucet.json').abi, config.addresses.faucet);
+    let faucetContract = hmy.client.contracts.createContract(require('../../abi/HRC20Faucet.json'), config.addresses.faucet);
     faucetContract = wallet.attachToContract(faucetContract);
 
     this.setState({ snackbarMessage: null, snackbarType: null, loading: true })

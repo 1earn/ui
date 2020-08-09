@@ -54,7 +54,7 @@ import {
   authereum
 } from "./connectors";
 
-import { MathWallet } from './mathwallet';
+import { MathWallet } from '../wallets/mathwallet';
 import { Hmy } from '../blockchain';
 
 const rp = require('request-promise');
@@ -69,7 +69,7 @@ const emitter = new Emitter();
 class Store {
   constructor() {
 
-    const hmy = new Hmy('testnet');
+    const hmy = new Hmy(config.network);
 
     this.store = {
       votingStatus: false,
@@ -115,7 +115,7 @@ class Store {
         id: 'yfi',
         name: '1earn.finance',
         address: config.addresses.onefi,
-        abi: require('../contracts/OneFI.json').abi,
+        abi: require('../abi/OneFI.json'),
         symbol: '1FI',
         balance: 0,
         decimals: 18,
@@ -136,10 +136,10 @@ class Store {
               id: 'ycurvefi',
               address: config.addresses.onecrv,
               symbol: '1CRV',
-              abi: require('../contracts/ERC20.json').abi,
+              abi: require('../abi/ERC20.json'),
               decimals: 18,
               rewardsAddress: config.addresses.rewards,
-              rewardsABI: require('../contracts/OneEarnRewards.json').abi,
+              rewardsABI: require('../abi/OneEarnRewards.json'),
               rewardsSymbol: '1FI',
               decimals: 18,
               balance: 0,
@@ -148,75 +148,6 @@ class Store {
             }
           ]
         },
-        /*{
-          id: 'Balancer',
-          name: 'Balancer',
-          website: 'pools.balancer.exchange',
-          link: 'https://pools.balancer.exchange/#/pool/0x60626db611a9957C1ae4Ac5b7eDE69e24A3B76c5',
-          depositsEnabled: false,
-          tokens: [
-            {
-              id: 'bpt',
-              address: '0x60626db611a9957C1ae4Ac5b7eDE69e24A3B76c5',
-              symbol: 'BPT',
-              abi: config.erc20ABI,
-              decimals: 18,
-              rewardsAddress: config.balancerRewardsAddress,
-              rewardsABI: config.balancerRewardsABI,
-              rewardsSymbol: 'YFI',
-              decimals: 18,
-              balance: 0,
-              stakedBalance: 0,
-              rewardsAvailable: 0
-            }
-          ]
-        },
-        {
-          id: 'Governance',
-          name: 'Governance',
-          website: 'pools.balancer.exchange',
-          link: 'https://pools.balancer.exchange/#/pool/0x95c4b6c7cff608c0ca048df8b81a484aa377172b',
-          depositsEnabled: false,
-          tokens: [
-            {
-              id: 'bpt',
-              address: '0x95c4b6c7cff608c0ca048df8b81a484aa377172b',
-              symbol: 'BPT',
-              abi: config.bpoolABI,
-              decimals: 18,
-              rewardsAddress: config.governanceAddress,
-              rewardsABI: config.governanceABI,
-              rewardsSymbol: 'YFI',
-              decimals: 18,
-              balance: 0,
-              stakedBalance: 0,
-              rewardsAvailable: 0
-            }
-          ]
-        },
-        {
-          id: 'FeeRewards',
-          name: 'Fee Rewards',
-          website: 'ygov.finance',
-          link: 'https://ygov.finance/',
-          depositsEnabled: false,
-          tokens: [
-            {
-              id: 'yfi',
-              address: config.addresses.onefi,
-              symbol: 'YFI',
-              abi: config.yfiABI,
-              decimals: 18,
-              rewardsAddress: config.feeRewardsAddress,
-              rewardsABI: config.feeRewardsABI,
-              rewardsSymbol: '$',
-              decimals: 18,
-              balance: 0,
-              stakedBalance: 0,
-              rewardsAvailable: 0
-            }
-          ]
-        },*/
         {
           id: 'GovernanceV2',
           name: 'Governance',
@@ -228,10 +159,10 @@ class Store {
               id: 'yfi',
               address: config.addresses.onefi,
               symbol: '1FI',
-              abi: require('../contracts/OneFI.json').abi,
+              abi: require('../abi/OneFI.json'),
               decimals: 18,
               rewardsAddress: config.addresses.governance,
-              rewardsABI: require('../contracts/OneEarnGovernance.json').abi,
+              rewardsABI: require('../abi/OneEarnGovernance.json'),
               rewardsSymbol: '$',
               decimals: 18,
               balance: 0,
@@ -468,7 +399,7 @@ class Store {
 
     const hmy = store.getStore('hmy');
     const wallet = store.getStore('mathwallet');
-    let erc20Contract = hmy.client.contracts.createContract(require('../contracts/ERC20.json').abi, asset.address);
+    let erc20Contract = hmy.client.contracts.createContract(require('../abi/ERC20.json'), asset.address);
     erc20Contract = wallet.attachToContract(erc20Contract);
     
     const allowance = await erc20Contract.methods.allowance(account.address, contract).call(hmy.gasOptions())
@@ -501,7 +432,7 @@ class Store {
   }
 
   _getERC20Balance = async (hmy, asset, account, callback) => {
-    let erc20Contract = hmy.client.contracts.createContract(require('../contracts/ERC20.json').abi, asset.address)
+    let erc20Contract = hmy.client.contracts.createContract(require('../abi/ERC20.json'), asset.address)
 
     try {
       var balance = await erc20Contract.methods.balanceOf(account.address).call(hmy.gasOptions());
@@ -543,7 +474,7 @@ class Store {
     //let erc20Contract = new web3.eth.Contract(config.erc20ABI, (overwriteAddress ? overwriteAddress : asset.address))
 
     const hmy = store.getStore('hmy');
-    let erc20Contract = hmy.client.contracts.createContract(require('../contracts/ERC20.json').abi, (overwriteAddress ? overwriteAddress : asset.address));
+    let erc20Contract = hmy.client.contracts.createContract(require('../abi/ERC20.json'), (overwriteAddress ? overwriteAddress : asset.address));
     
     const allowance = await erc20Contract.methods.allowance(account.address, contract).call(hmy.gasOptions())
 
@@ -562,7 +493,7 @@ class Store {
     
     const hmy = store.getStore('hmy');
     const wallet = store.getStore('mathwallet');
-    let erc20Contract = hmy.client.contracts.createContract(require('../contracts/ERC20.json').abi, (overwriteAddress ? overwriteAddress : asset.address));
+    let erc20Contract = hmy.client.contracts.createContract(require('../abi/ERC20.json'), (overwriteAddress ? overwriteAddress : asset.address));
     erc20Contract = wallet.attachToContract(erc20Contract);
     
     try {
@@ -774,10 +705,10 @@ class Store {
 
     const hmy = store.getStore('hmy');
     const wallet = store.getStore('mathwallet');
-    let yCurveFiContract = hmy.client.contracts.createContract(asset.rewardsABI, asset.rewardsAddress);
-    yCurveFiContract = wallet.attachToContract(yCurveFiContract);
+    let rewardsContract = hmy.client.contracts.createContract(asset.rewardsABI, asset.rewardsAddress);
+    rewardsContract = wallet.attachToContract(rewardsContract);
 
-    await yCurveFiContract.methods.getReward().send({ ...hmy.gasOptions(), from: account.address })
+    await rewardsContract.methods.getReward().send({ ...hmy.gasOptions(), from: account.address })
     .then((res) => {
       if (res.status === 'called' || res.status === 'call') {
         dispatcher.dispatch({ type: GET_BALANCES, content: {} })
@@ -902,7 +833,7 @@ class Store {
     const wallet = store.getStore('mathwallet');
 
     const governanceContractVersion = store.getStore('governanceContractVersion')
-    const abi = governanceContractVersion === 1 ? config.governanceABI  : require('../contracts/OneEarnGovernance.json').abi
+    const abi = governanceContractVersion === 1 ? config.governanceABI  : require('../abi/OneEarnGovernance.json')
     const address = governanceContractVersion === 1 ? config.governanceAddress  : config.addresses.governance
 
     //const governanceContract = new web3.eth.Contract(abi,address)
@@ -994,7 +925,7 @@ class Store {
     try {
 
       const governanceContractVersion = store.getStore('governanceContractVersion')
-      const abi = governanceContractVersion === 1 ? config.governanceABI  : require('../contracts/OneEarnGovernance.json').abi
+      const abi = governanceContractVersion === 1 ? config.governanceABI  : require('../abi/OneEarnGovernance.json')
       const address = governanceContractVersion === 1 ? config.governanceAddress  : config.addresses.governance
 
       //const governanceContract = new web3.eth.Contract(abi, address)
@@ -1012,7 +943,7 @@ class Store {
     try {
 
       const governanceContractVersion = store.getStore('governanceContractVersion')
-      const abi = governanceContractVersion === 1 ? config.governanceABI  : require('../contracts/OneEarnGovernance.json').abi
+      const abi = governanceContractVersion === 1 ? config.governanceABI  : require('../abi/OneEarnGovernance.json')
       const address = governanceContractVersion === 1 ? config.governanceAddress  : config.addresses.governance
 
       //const governanceContract = new web3.eth.Contract(abi, address)
@@ -1039,7 +970,7 @@ class Store {
       //const governanceContract = new web3.eth.Contract(config.governanceV2ABI,config.addresses.governance)
 
       const hmy = store.getStore('hmy');
-      const governanceContract = hmy.client.contracts.createContract(require('../contracts/OneEarnGovernance.json').abi, config.addresses.governance);
+      const governanceContract = hmy.client.contracts.createContract(require('../abi/OneEarnGovernance.json'), config.addresses.governance);
 
       const status = await governanceContract.methods.voters(account.address).call(hmy.gasOptions())
 
@@ -1069,7 +1000,7 @@ class Store {
 
     const hmy = store.getStore('hmy');
     const wallet = store.getStore('mathwallet');
-    let governanceContract = hmy.client.contracts.createContract(require('../contracts/OneEarnGovernance.json').abi, config.addresses.governance);
+    let governanceContract = hmy.client.contracts.createContract(require('../abi/OneEarnGovernance.json'), config.addresses.governance);
     governanceContract = wallet.attachToContract(governanceContract);
 
     governanceContract.methods.register().send({ ...hmy.gasOptions(), from: account.address })
@@ -1128,7 +1059,7 @@ class Store {
 
   _callVoteFor = async (proposal, account, callback) => {
     const governanceContractVersion = store.getStore('governanceContractVersion')
-    const abi = governanceContractVersion === 1 ? config.governanceABI  : require('../contracts/OneEarnGovernance.json').abi
+    const abi = governanceContractVersion === 1 ? config.governanceABI  : require('../abi/OneEarnGovernance.json')
     const address = governanceContractVersion === 1 ? config.governanceAddress  : config.addresses.governance
 
     //const web3 = new Web3(store.getStore('web3context').library.provider);
@@ -1195,7 +1126,7 @@ class Store {
 
   _callVoteAgainst = async (proposal, account, callback) => {
     const governanceContractVersion = store.getStore('governanceContractVersion')
-    const abi = governanceContractVersion === 1 ? config.governanceABI  : require('../contracts/OneEarnGovernance.json').abi
+    const abi = governanceContractVersion === 1 ? config.governanceABI  : require('../abi/OneEarnGovernance.json')
     const address = governanceContractVersion === 1 ? config.governanceAddress  : config.addresses.governance
 
     //const web3 = new Web3(store.getStore('web3context').library.provider);
@@ -1405,7 +1336,7 @@ class Store {
       //const governanceContract = new web3.eth.Contract(config.governanceABI,config.governanceAddress)
 
       const hmy = store.getStore('hmy');
-      const governanceContract = hmy.client.contracts.createContract(require('../contracts/OneEarnGovernance.json').abi, config.addresses.governance);
+      const governanceContract = hmy.client.contracts.createContract(require('../abi/OneEarnGovernance.json'), config.addresses.governance);
 
       let balance = await governanceContract.methods.balanceOf(account.address).call(hmy.gasOptions())
       balance = parseFloat(balance)/10**18

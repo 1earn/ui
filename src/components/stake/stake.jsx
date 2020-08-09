@@ -436,7 +436,7 @@ class Stake extends Component {
             className={ classes.actionButton }
             variant="outlined"
             color="primary"
-            disabled={ loading || (['GovernanceV2'].includes(pool.id) && !voteLock) }
+            disabled={ loading || (['GovernanceV2'].includes(pool.id) && !voteLockValid) }
             onClick={ () => { this.onClaim() } }
             >
             <Typography className={ classes.buttonText } variant={ 'h4'}>Claim Rewards</Typography>
@@ -448,7 +448,7 @@ class Stake extends Component {
             className={ classes.actionButton }
             variant="outlined"
             color="primary"
-            disabled={ (pool.id === 'Governance' ? (loading || voteLockValid ) : loading  ) }
+            disabled={ loading || (['GovernanceV2'].includes(pool.id) && voteLockValid) }
             onClick={ () => { this.navigateInternal('unstake') } }
             >
             <Typography className={ classes.buttonText } variant={ 'h4'}>Unstake Tokens</Typography>
@@ -469,7 +469,7 @@ class Stake extends Component {
           }
         </div>
         { (['Governance', 'GovernanceV2'].includes(pool.id) && voteLockValid) && <Typography variant={'h4'} className={ classes.voteLockMessage }>Unstaking tokens only allowed once all your pending votes have closed at Block: {voteLock.toString()}</Typography> }
-        { (['GovernanceV2'].includes(pool.id) && !voteLock) && <Typography variant={'h4'} className={ classes.voteLockMessage }>You need to have voted in order to claim rewards</Typography> }
+        { (['Governance', 'GovernanceV2'].includes(pool.id) && !voteLockValid) && <Typography variant={'h4'} className={ classes.voteLockMessage }>You need to have voted in order to claim rewards</Typography> }
       </div>
     )
   }
