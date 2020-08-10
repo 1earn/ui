@@ -168,7 +168,7 @@ class Store {
               decimals: 18,
               rewardsAddress: config.addresses.governance,
               rewardsABI: require('../abi/OneEarnGovernance.json'),
-              rewardsSymbol: '$',
+              rewardsSymbol: '1CRV',
               decimals: 18,
               balance: 0,
               stakedBalance: 0,
