@@ -70,6 +70,7 @@ class Store {
   constructor() {
 
     const hmy = new Hmy(config.network);
+    const mathwallet = new MathWallet(config.network, hmy.client);
 
     this.store = {
       votingStatus: false,
@@ -79,9 +80,10 @@ class Store {
       account: {},
       web3: null,
       hmy: hmy,
-      mathwallet: new MathWallet(config.network, hmy.client),
+      mathwallet: mathwallet,
       connectorsByName: {
-        MetaMask: injected,
+        MathWallet: mathwallet
+        /*MetaMask: injected,
         TrustWallet: injected,
         WalletConnect: walletconnect,
         WalletLink: walletlink,
@@ -92,7 +94,7 @@ class Store {
         Portis: portis,
         Squarelink: squarelink,
         Torus: torus,
-        Authereum: authereum
+        Authereum: authereum*/
       },
       web3context: null,
       languages: [

@@ -30,7 +30,7 @@ import Store from "../../stores";
 const emitter = Store.emitter
 const dispatcher = Store.dispatcher
 const store = Store.store
-
+const hmy = store.getStore('hmy');
 
 const styles = theme => ({
   root: {
@@ -142,7 +142,6 @@ const styles = theme => ({
   }
 });
 
-
 class Proposal extends Component {
 
   constructor() {
@@ -243,7 +242,8 @@ class Proposal extends Component {
 
     var address = null;
     if (proposal.executor) {
-      address = proposal.executor.substring(0,8)+'...'+proposal.executor.substring(proposal.executor.length-6,proposal.executor.length)
+      let bech32Address = hmy.getBech32Address(proposal.executor);
+      address = bech32Address.substring(0,8)+'...'+bech32Address.substring(bech32Address.length-6,bech32Address.length)
     }
 
     const hashURL = proposal.hash

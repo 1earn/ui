@@ -119,6 +119,9 @@ class Unlock extends Component {
     if(this.props.closeModal != null) {
       this.props.closeModal()
     }
+
+    //this.props.history.push('/') // state isn't fully reset
+    window.location.reload();
   }
 
   metamaskUnlocked = () => {
@@ -160,7 +163,6 @@ class Unlock extends Component {
 }
 
 function getLibrary(provider) {
-
   const library = new Web3Provider(provider);
   library.pollingInterval = 8000;
   return library;
@@ -176,11 +178,17 @@ function onDeactivateClicked(deactivate, connector) {
   if(deactivate) {
     deactivate()
   }
-  if(connector && connector.close) {
-    connector.close()
+
+  if (connector && connector.signOut) {
+    connector.signOut().then(() => {
+      store.setStore({ account: { } })
+      emitter.emit(CONNECTION_DISCONNECTED)
+    });
   }
-  store.setStore({ account: { }, web3context: null })
-  emitter.emit(CONNECTION_DISCONNECTED)
+
+  /*if(connector && connector.close) {
+    connector.close()
+  }*/
 }
 
 function MyComponent(props) {
@@ -192,7 +200,7 @@ function MyComponent(props) {
     localConnector = localContext.connector
   }
   const {
-    connector,
+    tempConnector,
     library,
     account,
     activate,
@@ -200,7 +208,9 @@ function MyComponent(props) {
     active,
     error
   } = context;
-  var connectorsByName = store.getStore('connectorsByName')
+
+  var connectorsByName = store.getStore('connectorsByName');
+  const connector = connectorsByName["MathWallet"];
 
   const { closeModal, t } = props
 
@@ -243,7 +253,12 @@ function MyComponent(props) {
 
         var url;
         var display = name;
-        if (name === 'MetaMask') {
+
+        if (name === 'MathWallet') {
+          url = require('../../assets/MathWallet_App_Icon.png');
+        }
+
+        /*if (name === 'MetaMask') {
           url = require('../../assets/icn-metamask.svg')
         } else if (name === 'WalletConnect') {
           url = require('../../assets/walletConnectIcon.svg')
@@ -268,7 +283,7 @@ function MyComponent(props) {
           url = require('../../assets/coinbaseWalletIcon.svg')
         } else if (name === 'Frame') {
           return ''
-        }
+        }*/
 
         return (
           <div key={name} style={{ padding: '12px 0px', display: 'flex', justifyContent: 'space-between'  }}>
@@ -333,7 +348,7 @@ function MyComponent(props) {
             } }
             variant={ 'h5'}
             color='primary'>
-            { t('Unlock.Deactivate') }
+            Log out
           </Typography>
         </Button>
       </div>

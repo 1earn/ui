@@ -16,6 +16,8 @@ import ClearIcon from '@material-ui/icons/Clear';
 import Loader from '../loader'
 import Snackbar from '../snackbar'
 
+import UnlockModal from '../unlock/unlockModal.jsx'
+
 import Store from "../../stores";
 import { colors } from '../../theme'
 
@@ -32,7 +34,8 @@ import {
   EXIT_RETURNED,
   GET_YCRV_REQUIREMENTS,
   GET_YCRV_REQUIREMENTS_RETURNED,
-  GET_BALANCES_RETURNED
+  GET_BALANCES_RETURNED,
+  CONNECTION_DISCONNECTED
 } from '../../constants'
 
 const styles = theme => ({
@@ -80,11 +83,13 @@ const styles = theme => ({
       width: '450',
     }
   },
-  disaclaimer: {
+  disclaimer: {
     padding: '12px',
     border: '1px solid rgb(174, 174, 174)',
     borderRadius: '0.75rem',
     marginBottom: '24px',
+    color: colors.white,
+    background: colors.red
   },
   addressContainer: {
     display: 'flex',
@@ -348,7 +353,7 @@ class Stake extends Component {
 
     var address = null;
     if (account.address) {
-      address = account.address.substring(0,6)+'...'+account.address.substring(account.address.length-4,account.address.length)
+      address = account.bech32Address.substring(0,6)+'...'+account.bech32Address.substring(account.bech32Address.length-4,account.bech32Address.length)
     }
 
     if(!pool) {
@@ -357,7 +362,7 @@ class Stake extends Component {
 
     return (
       <div className={ classes.root }>
-        <Typography variant={'h5'} className={ classes.disaclaimer }>This project is in beta. Use at your own risk.</Typography>
+        <Typography variant={'h5'} className={ classes.disclaimer }>This project is in beta. Use at your own risk.</Typography>
         <div className={ classes.intro }>
           <Button
             className={ classes.stakeButton }
@@ -407,6 +412,7 @@ class Stake extends Component {
 
         { snackbarMessage && this.renderSnackbar() }
         { loading && <Loader /> }
+        { modalOpen && this.renderModal() }
       </div>
     )
   }
@@ -545,6 +551,12 @@ class Stake extends Component {
         </div>
 
       </div>
+    )
+  }
+
+  renderModal = () => {
+    return (
+      <UnlockModal closeModal={ this.closeModal } modalOpen={ this.state.modalOpen } />
     )
   }
 

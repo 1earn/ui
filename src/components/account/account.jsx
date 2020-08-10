@@ -89,7 +89,8 @@ const styles = theme => ({
     borderRadius: '0.75rem',
     marginBottom: '24px',
     fontWeight: 1,
-    color: colors.white
+    color: colors.white,
+    background: colors.red
   }
 });
 
@@ -188,7 +189,7 @@ class Account extends Component {
     const wallet = store.getStore('mathwallet');
     
     wallet.signIn().then(() => {
-      store.setStore({ account: { address: wallet.base16Address } })
+      store.setStore({ account: { address: wallet.base16Address, bech32Address: wallet.address } })
   
       emitter.emit(CONNECTION_CONNECTED)
     });

@@ -107,11 +107,13 @@ const styles = theme => ({
     fontWeight: '700',
     color: 'white',
   },
-  disaclaimer: {
+  disclaimer: {
     padding: '12px',
     border: '1px solid rgb(174, 174, 174)',
     borderRadius: '0.75rem',
     marginBottom: '24px',
+    color: colors.white,
+    background: colors.red
   },
   addressContainer: {
     display: 'flex',
@@ -239,6 +241,7 @@ const styles = theme => ({
 const emitter = Store.emitter
 const dispatcher = Store.dispatcher
 const store = Store.store
+const hmy = store.getStore('hmy');
 
 class Vote extends Component {
 
@@ -355,12 +358,12 @@ class Vote extends Component {
 
     var address = null;
     if (account.address) {
-      address = account.address.substring(0,6)+'...'+account.address.substring(account.address.length-4,account.address.length)
+      address = account.bech32Address.substring(0,6)+'...'+account.bech32Address.substring(account.bech32Address.length-4,account.bech32Address.length)
     }
 
     return (
       <div className={ classes.root }>
-        <Typography variant={'h5'} className={ classes.disaclaimer }>This project is in beta. Use at your own risk.</Typography>
+        <Typography variant={'h5'} className={ classes.disclaimer }>This project is in beta. Use at your own risk.</Typography>
         <div className={ classes.intro }>
           <Card className={ classes.addressContainer } onClick={this.overlayClicked}>
             <Typography variant={ 'h3'} className={ classes.walletTitle } noWrap>Wallet</Typography>
@@ -448,7 +451,8 @@ class Vote extends Component {
     return filteredProposals.map((proposal) => {
       var address = null;
       if (proposal.proposer) {
-        address = proposal.proposer.substring(0,8)+'...'+proposal.proposer.substring(proposal.proposer.length-6,proposal.proposer.length)
+        let bech32Address = hmy.getBech32Address(proposal.proposer);
+        address = bech32Address.substring(0,8)+'...'+bech32Address.substring(bech32Address.length-6,bech32Address.length)
       }
 
       return (
@@ -491,7 +495,8 @@ class Vote extends Component {
   }
 
   goToDashboard = () => {
-    window.open('https://gov.1earn.finance/', "_blank")
+    //window.open('https://gov.1earn.finance/', "_blank")
+    window.open('https://talk.harmony.one/c/uncategorized/1', "_blank")
   }
 
   handleTabChange = (event, newValue) => {

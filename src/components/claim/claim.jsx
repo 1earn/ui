@@ -90,11 +90,13 @@ const styles = theme => ({
     fontWeight: '700',
     color: 'white',
   },
-  disaclaimer: {
+  disclaimer: {
     padding: '12px',
     border: '1px solid rgb(174, 174, 174)',
     borderRadius: '0.75rem',
     marginBottom: '24px',
+    color: colors.white,
+    background: colors.red
   },
   addressContainer: {
     display: 'flex',
@@ -273,12 +275,12 @@ class Claim extends Component {
 
     var address = null;
     if (account.address) {
-      address = account.address.substring(0,6)+'...'+account.address.substring(account.address.length-4,account.address.length)
+      address = account.bech32Address.substring(0,6)+'...'+account.bech32Address.substring(account.bech32Address.length-4,account.bech32Address.length)
     }
 
     return (
       <div className={ classes.root }>
-        <Typography variant={'h5'} className={ classes.disaclaimer }>This project is in beta. Use at your own risk.</Typography>
+        <Typography variant={'h5'} className={ classes.disclaimer }>This project is in beta. Use at your own risk.</Typography>
         <div className={ classes.intro }>
           <Card className={ classes.addressContainer } onClick={this.overlayClicked}>
             <Typography variant={ 'h3'} className={ classes.walletTitle } noWrap>Wallet</Typography>

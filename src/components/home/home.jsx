@@ -256,7 +256,7 @@ class Home extends Component {
         const url = `${hmy.explorerUrl}/tx/${res.transaction.receipt.transactionHash}`
         this.setState({ snackbarMessage: url, snackbarType: "Hash", loading: false })
       } else {
-        this.setState({ snackbarMessage: "You've already requested funds from the faucet!", snackbarType: "Error", loading: false })
+        this.setState({ snackbarMessage: "An error occurred :(. Could it be that you've already requested funds from the faucet recently?", snackbarType: "Error", loading: false })
       }
 
     });

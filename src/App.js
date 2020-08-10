@@ -20,6 +20,7 @@ import Propose from './components/propose';
 import Claim from './components/claim';
 import Vote from './components/vote';
 import VersionToggle from './components/versionToggle';
+import SignoutButton from './components/signoutButton';
 
 import {
   CONNECTION_CONNECTED,
@@ -56,7 +57,7 @@ class App extends Component {
     const wallet = store.getStore('mathwallet');
 
     if (wallet.isAuthorized) {
-      store.setStore({ account: { address: wallet.base16Address } })
+      store.setStore({ account: { address: wallet.base16Address, bech32Address: wallet.address } })
       emitter.emit(CONNECTION_CONNECTED)
     }
 
@@ -140,16 +141,19 @@ class App extends Component {
                   <Stake />
                 </Route>
                 <Route path="/staking">
+                  <SignoutButton />
                   {/* <VersionToggle /> */}
                   <Footer />
                   <RewardsPools />
                 </Route>
                 <Route path="/vote">
+                  <SignoutButton />
                   {/* <VersionToggle /> */}
                   <Footer />
                   <Vote />
                 </Route>
                 <Route path="/propose">
+                  <SignoutButton />
                   {/* <VersionToggle /> */}
                   <Footer />
                   <Propose />
