@@ -320,7 +320,8 @@ class Vote extends Component {
   }
 
   showHash = (txHash) => {
-    this.showSnackbar(txHash, 'Hash')
+    const url = `${hmy.explorerUrl}/tx/${txHash}`
+    this.showSnackbar(url, 'Hash')
   };
 
   showAddressCopiedSnack = () => {

@@ -210,7 +210,7 @@ function MyComponent(props) {
   } = context;
 
   var connectorsByName = store.getStore('connectorsByName');
-  const connector = connectorsByName["MathWallet"];
+  const connector = connectorsByName["OneWallet"];
 
   const { closeModal, t } = props
 
@@ -254,8 +254,10 @@ function MyComponent(props) {
         var url;
         var display = name;
 
-        if (name === 'MathWallet') {
-          url = require('../../assets/MathWallet_App_Icon.png');
+        if (name === 'OneWallet') {
+          url = require('../../assets/harmony.png')
+        } else if (name === 'MathWallet') {
+          url = require('../../assets/harmony.png')
         }
 
         /*if (name === 'MetaMask') {

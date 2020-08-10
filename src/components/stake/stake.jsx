@@ -242,6 +242,7 @@ const styles = theme => ({
 const emitter = Store.emitter
 const dispatcher = Store.dispatcher
 const store = Store.store
+const hmy = store.getStore('hmy');
 
 class Stake extends Component {
 
@@ -316,12 +317,10 @@ class Stake extends Component {
   }
 
   showHash  = (txHash) => {
-    const hmy = store.getStore('hmy');
-    const url = `${hmy.explorerUrl}/tx/${txHash}`
-
     this.setState({ snackbarMessage: null, snackbarType: null, loading: false })
     const that = this
     setTimeout(() => {
+      const url = `${hmy.explorerUrl}/tx/${txHash}`
       const snackbarObj = { snackbarMessage: url, snackbarType: 'Hash' }
       that.setState(snackbarObj)
     })

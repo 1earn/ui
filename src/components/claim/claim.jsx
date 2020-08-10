@@ -190,6 +190,7 @@ const styles = theme => ({
 const emitter = Store.emitter
 const dispatcher = Store.dispatcher
 const store = Store.store
+const hmy = store.getStore('hmy');
 
 class Claim extends Component {
 
@@ -228,7 +229,8 @@ class Claim extends Component {
     this.setState({ snackbarMessage: null, snackbarType: null, loading: false })
     const that = this
     setTimeout(() => {
-      const snackbarObj = { snackbarMessage: txHash, snackbarType: 'Hash' }
+      const url = `${hmy.explorerUrl}/tx/${txHash}`
+      const snackbarObj = { snackbarMessage: url, snackbarType: 'Hash' }
       that.setState(snackbarObj)
     })
   };

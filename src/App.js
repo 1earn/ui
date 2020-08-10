@@ -54,8 +54,7 @@ class App extends Component {
     emitter.on(CONFIGURE_RETURNED, this.configureReturned);
     emitter.on(GET_BALANCES_PERPETUAL_RETURNED, this.getBalancesReturned);
 
-    const wallet = store.getStore('mathwallet');
-
+    const wallet = store.getStore('wallet');
     if (wallet.isAuthorized) {
       store.setStore({ account: { address: wallet.base16Address, bech32Address: wallet.address } })
       emitter.emit(CONNECTION_CONNECTED)

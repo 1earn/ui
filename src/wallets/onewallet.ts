@@ -1,17 +1,24 @@
 import { action, observable } from 'mobx';
+const {HarmonyExtension} = require('@harmony-js/core')
+const {ChainType} = require('@harmony-js/utils')
+const { fromBech32 } = require('@harmony-js/crypto')
+const {Messenger, Provider} = require('@harmony-js/network')
+
 const { Harmony } = require('@harmony-js/core');
 const defaults = {};
 
-export class MathWallet {
+export class OneWallet {
   network: string;
   client: typeof Harmony;
   @observable public isAuthorized: boolean;
   redirectUrl: string;
 
-  private mathwallet: any;
-  @observable public isMathWallet = false;
+  private onewallet: any;
+  @observable public isOneWallet = false;
 
-  @observable public sessionType: 'mathwallet' | 'ledger' | 'wallet';
+  @observable public extension: any;
+
+  @observable public sessionType: 'onewallet' | 'ledger' | 'wallet';
   @observable public address: string;
   @observable public base16Address: string;
   @observable public balance: string = '0';
@@ -30,7 +37,7 @@ export class MathWallet {
 
     this.initWallet();
 
-    const session = localStorage.getItem(`harmony_${this.network}_mathwallet_session`);
+    const session = localStorage.getItem(`harmony_${this.network}_onewallet_session`);
     const sessionObj = JSON.parse(session);
 
     if (sessionObj && sessionObj.address) {
@@ -42,12 +49,12 @@ export class MathWallet {
   }
 
   @action public signIn() {
-    if (!this.mathwallet) {
+    if (!this.onewallet) {
       this.initWallet();
     }
 
-    return this.mathwallet.getAccount().then(account => {
-      this.sessionType = `mathwallet`;
+    return this.onewallet.getAccount().then(account => {
+      this.sessionType = `onewallet`;
       this.address = account.address;
       this.isAuthorized = true;
       this.setBase16Address();
@@ -59,8 +66,8 @@ export class MathWallet {
   }
 
   @action public signOut() {
-    if (this.sessionType === 'mathwallet' && this.isMathWallet) {
-      return this.mathwallet
+    if (this.sessionType === 'onewallet' && this.isOneWallet) {
+      return this.onewallet
         .forgetIdentity()
         .then(() => {
           this.sessionType = null;
@@ -81,14 +88,25 @@ export class MathWallet {
 
   private initWallet() {
     // @ts-ignore
-    this.isMathWallet = window.harmony && window.harmony.isMathWallet;
-    // @ts-ignore
-    this.mathwallet = window.harmony;
+    if (window.onewallet) {
+      // @ts-ignore
+      this.onewallet = window.onewallet;
+      this.isOneWallet = true;
+
+      this.extension = new HarmonyExtension(this.onewallet);
+      this.extension.provider = this.client.provider;
+      this.extension.messenger = this.client.messenger;
+      this.extension.setShardID(0)
+      this.extension.wallet.messenger = this.client.messenger;
+      this.extension.blockchain.messenger = this.client.messenger;
+      this.extension.transactions.messenger = this.client.messenger;
+      this.extension.contracts.wallet = this.extension.wallet
+    }
   }
 
   private syncLocalStorage() {
     localStorage.setItem(
-      `harmony_${this.network}_mathwallet_session`,
+      `harmony_${this.network}_onewallet_session`,
       JSON.stringify({
         address: this.address,
         sessionType: this.sessionType,
@@ -101,8 +119,8 @@ export class MathWallet {
   }
 
   @action public signTransaction(txn: any) {
-    if (this.sessionType === 'mathwallet' && this.isMathWallet) {
-      return this.mathwallet.signTransaction(txn);
+    if (this.sessionType === 'onewallet' && this.isOneWallet) {
+      return this.onewallet.signTransaction(txn);
     }
   }
 
@@ -134,7 +152,7 @@ export class MathWallet {
       } catch (err) {
 
         if (err.type == "locked") {
-          alert("Your MathWallet is locked! Please unlock it and try again!");
+          alert("Your OneWallet is locked! Please unlock it and try again!");
           return Promise.reject();
         } else if (err.type == "networkError") {
           // This happens when there's local storage data available after a browser shutdown
@@ -153,7 +171,7 @@ export class MathWallet {
           }
 
         } else {
-          alert("An error occurred - please check that you have MathWallet installed and that it is properly configured!");
+          alert("An error occurred - please check that you have OneWallet installed and that it is properly configured!");
           return Promise.reject();
         }
       }

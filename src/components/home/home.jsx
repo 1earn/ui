@@ -241,7 +241,7 @@ class Home extends Component {
 
   faucet = async () => {
     const hmy = store.getStore('hmy');
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
     const account = store.getStore('account');
 
     let faucetContract = hmy.client.contracts.createContract(require('../../abi/HRC20Faucet.json'), config.addresses.faucet);

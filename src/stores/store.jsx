@@ -55,6 +55,7 @@ import {
 } from "./connectors";
 
 import { MathWallet } from '../wallets/mathwallet';
+import { OneWallet } from '../wallets/onewallet';
 import { Hmy } from '../blockchain';
 
 const rp = require('request-promise');
@@ -71,6 +72,7 @@ class Store {
 
     const hmy = new Hmy(config.network);
     const mathwallet = new MathWallet(config.network, hmy.client);
+    const onewallet = new OneWallet(config.network, hmy.client);
 
     this.store = {
       votingStatus: false,
@@ -80,9 +82,10 @@ class Store {
       account: {},
       web3: null,
       hmy: hmy,
-      mathwallet: mathwallet,
+      wallet: onewallet,
       connectorsByName: {
-        MathWallet: mathwallet
+        OneWallet: onewallet,
+        //MathWallet: mathwallet,
         /*MetaMask: injected,
         TrustWallet: injected,
         WalletConnect: walletconnect,
@@ -372,7 +375,7 @@ class Store {
       //const erc20Contract = new web3.eth.Contract(asset.abi, asset.address)
 
       const hmy = store.getStore('hmy');
-      const wallet = store.getStore('mathwallet');
+      const wallet = store.getStore('wallet');
       let erc20Contract = hmy.client.contracts.createContract(asset.abi, asset.address);
       erc20Contract = wallet.attachToContract(erc20Contract);
 
@@ -400,7 +403,7 @@ class Store {
     //let erc20Contract = new web3.eth.Contract(config.erc20ABI, asset.address)
 
     const hmy = store.getStore('hmy');
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
     let erc20Contract = hmy.client.contracts.createContract(require('../abi/ERC20.json'), asset.address);
     erc20Contract = wallet.attachToContract(erc20Contract);
     
@@ -494,7 +497,7 @@ class Store {
     //let erc20Contract = new web3.eth.Contract(config.erc20ABI, (overwriteAddress ? overwriteAddress : asset.address))
     
     const hmy = store.getStore('hmy');
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
     let erc20Contract = hmy.client.contracts.createContract(require('../abi/ERC20.json'), (overwriteAddress ? overwriteAddress : asset.address));
     erc20Contract = wallet.attachToContract(erc20Contract);
     
@@ -562,7 +565,7 @@ class Store {
     //const yCurveFiContract = new web3.eth.Contract(asset.rewardsABI, asset.rewardsAddress)
 
     const hmy = store.getStore('hmy');
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
 
     let rewardsContract = hmy.client.contracts.createContract(asset.rewardsABI, asset.rewardsAddress);
     rewardsContract = wallet.attachToContract(rewardsContract);
@@ -632,7 +635,7 @@ class Store {
     //const yCurveFiContract = new web3.eth.Contract(asset.rewardsABI, asset.rewardsAddress)
 
     const hmy = store.getStore('hmy');
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
 
     let yCurveFiContract = hmy.client.contracts.createContract(asset.rewardsABI, asset.rewardsAddress);
     yCurveFiContract = wallet.attachToContract(yCurveFiContract);
@@ -706,7 +709,7 @@ class Store {
     //const yCurveFiContract = new web3.eth.Contract(asset.rewardsABI, asset.rewardsAddress)
 
     const hmy = store.getStore('hmy');
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
     let rewardsContract = hmy.client.contracts.createContract(asset.rewardsABI, asset.rewardsAddress);
     rewardsContract = wallet.attachToContract(rewardsContract);
 
@@ -769,7 +772,7 @@ class Store {
     //const yCurveFiContract = new web3.eth.Contract(asset.rewardsABI, asset.rewardsAddress)
 
     const hmy = store.getStore('hmy');
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
     let yCurveFiContract = hmy.client.contracts.createContract(asset.rewardsABI, asset.rewardsAddress);
     yCurveFiContract = wallet.attachToContract(yCurveFiContract);
 
@@ -832,7 +835,7 @@ class Store {
     //const web3 = new Web3(store.getStore('web3context').library.provider);
 
     const hmy = store.getStore('hmy');
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
 
     const governanceContractVersion = store.getStore('governanceContractVersion')
     const abi = governanceContractVersion === 1 ? config.governanceABI  : require('../abi/OneEarnGovernance.json')
@@ -1001,7 +1004,7 @@ class Store {
     //const governanceContract = new web3.eth.Contract(config.governanceV2ABI, config.addresses.governance)
 
     const hmy = store.getStore('hmy');
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
     let governanceContract = hmy.client.contracts.createContract(require('../abi/OneEarnGovernance.json'), config.addresses.governance);
     governanceContract = wallet.attachToContract(governanceContract);
 
@@ -1068,7 +1071,7 @@ class Store {
     //const governanceContract = new web3.eth.Contract(abi,address)
 
     const hmy = store.getStore('hmy');
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
     let governanceContract = hmy.client.contracts.createContract(abi, address);
     governanceContract = wallet.attachToContract(governanceContract);
 
@@ -1135,7 +1138,7 @@ class Store {
     //const governanceContract = new web3.eth.Contract(abi,address)
 
     const hmy = store.getStore('hmy');
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
 
     let governanceContract = hmy.client.contracts.createContract(abi, address);
     governanceContract = wallet.attachToContract(governanceContract);
@@ -1256,7 +1259,7 @@ class Store {
     //const claimContract = new web3.eth.Contract(config.claimABI, config.claimAddress)
 
     const hmy = store.getStore('hmy');
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
     let claimContract = hmy.client.contracts.createContract(config.claimABI, config.claimAddress);
     claimContract = wallet.attachToContract(claimContract);
     

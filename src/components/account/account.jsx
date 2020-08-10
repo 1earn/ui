@@ -162,7 +162,7 @@ class Account extends Component {
         <Typography variant={'h5'} className={ classes.disclaimer }>This project is in beta. Use at your own risk.</Typography>
         <div className={ classes.connectHeading }>
           <Typography variant='h3'>Connect your wallet to continue</Typography>
-          <Typography variant='h5'><br />(We currently only support MathWallet - ONE wallet support is coming soon)</Typography>
+          <Typography variant='h5'><br />(We currently only support OneWallet)</Typography>
         </div>
         <div className={ classes.connectContainer }>
           <Button
@@ -186,11 +186,10 @@ class Account extends Component {
   }
 
   unlockClicked = () => {
-    const wallet = store.getStore('mathwallet');
+    const wallet = store.getStore('wallet');
     
     wallet.signIn().then(() => {
       store.setStore({ account: { address: wallet.base16Address, bech32Address: wallet.address } })
-  
       emitter.emit(CONNECTION_CONNECTED)
     });
 
