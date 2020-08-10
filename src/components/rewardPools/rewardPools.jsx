@@ -276,8 +276,8 @@ class RewardPools extends Component {
     var address = null;
     let addy = ''
     if (rewardPool.tokens && rewardPool.tokens[0]) {
-      addy = rewardPool.tokens[0].rewardsAddress
-      address = addy.substring(0,6)+'...'+addy.substring(addy.length-4,addy.length)
+      addy = hmy.getBech32Address(rewardPool.tokens[0].rewardsAddress);
+      address = addy.substring(0,6)+'...'+addy.substring(addy.length-4,addy.length);
     }
 
     let bech32 = hmy.getBech32Address(addy);
